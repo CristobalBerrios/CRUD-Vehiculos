@@ -19,6 +19,7 @@ class CreateUsuariosTable extends Migration
             $table->string('apellidos');
             $table->string('correo');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
