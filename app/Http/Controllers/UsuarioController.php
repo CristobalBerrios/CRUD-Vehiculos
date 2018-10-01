@@ -36,7 +36,13 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $usuario = new Usuario;
+        $usuario->nombre = $request->nombre;
+        $usuario->apellidos = $request->apellidos;
+        $usuario->correo = $request->correo;
+        $usuario->save();
+
+        return $usuario;
     }
 
     /**
@@ -70,7 +76,10 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $usuario = Usuario::findOrFail($id);
+        $usuario->update($request->all());
+
+        return ['update' => true];
     }
 
     /**
