@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" persistent max-width="500px">
     <v-card>
       <v-toolbar flat color="blue" dark>
-        <v-toolbar-title v-if="usuario.nombre">Editar Usuario</v-toolbar-title>
+        <v-toolbar-title v-if="usuario.id">Editar Usuario</v-toolbar-title>
         <v-toolbar-title v-else>Agregar Usuario</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon @click="closeDialog()">
@@ -14,21 +14,24 @@
           <v-text-field
             v-model="usuario.nombre"
             label="Nombre"
+            :rules="formRules"
             required>
           </v-text-field>
           <v-text-field
             v-model="usuario.apellidos"
             label="Apellidos"
+            :rules="formRules"
             required>
           </v-text-field>
           <v-text-field
             v-model="usuario.correo"
             label="Correo"
+            :rules="correoRules"
             required>
           </v-text-field>
 
-          <v-btn block :disabled="!valid" @click="editarUsuario(usuario)" v-if="usuario.nombre">Guardar</v-btn>
-          <v-btn block :disabled="!valid" @click="agregarUsuario(usuario)" v-else>Agregar</v-btn>
+          <v-btn block @click="editarUsuario(usuario)" v-if="usuario.id">Guardar</v-btn>
+          <v-btn block @click="agregarUsuario(usuario)" v-else>Agregar</v-btn>
       </v-form>
       </v-card-text>
     </v-card>
@@ -41,25 +44,35 @@ export default {
   data () {
     return {
       valid: true,
-      title: ''
+      title: '',
+      formRules: [v => !!v || 'El campo es requerido'],
+      correoRules: [
+        v => !!v || 'El campo es requerido',
+        v => /.+@.+/.test(v) || 'Correo no valido'
+      ]
     }
   },
   props: ['dialog', 'usuario'],
   methods: {
     closeDialog () {
       this.$emit('closeDialog')
+      this.$refs.form.reset()
     },
     editarUsuario (usuario) {
-      axios.put(`/api/usuarios/${usuario.id}`, usuario).then(() => {
-        this.$emit('actualizarUsuario', usuario)
-        this.closeDialog()
-      })
+      if (this.$refs.form.validate()) {
+        axios.put(`/api/usuarios/${usuario.id}`, usuario).then(() => {
+          this.$emit('actualizarUsuario', usuario)
+          this.closeDialog()
+        })
+      }
     },
     agregarUsuario (usuario) {
-      axios.post('/api/usuarios', usuario).then(response => {
-        this.$emit('nuevoUsuario', response.data)
-        this.closeDialog()
-      })
+      if (this.$refs.form.validate()) {
+        axios.post('/api/usuarios', usuario).then(response => {
+          this.$emit('nuevoUsuario', response.data)
+          this.closeDialog()
+        })
+      }
     }
   }
 }
