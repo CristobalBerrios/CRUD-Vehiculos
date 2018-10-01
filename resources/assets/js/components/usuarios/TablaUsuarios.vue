@@ -2,7 +2,7 @@
   <section>
     <v-data-table
       :headers="headers"
-      :items="clientes"
+      :items="usuarios"
       hide-actions
       class="elevation-1">
       <template slot="items" slot-scope="props">
@@ -10,7 +10,7 @@
         <td class="text-xs-left">{{ props.item.apellidos }}</td>
         <td class="text-xs-left">{{ props.item.correo }}</td>
         <td class="text-xs-left"> 
-          <v-btn icon>
+          <v-btn @click="editarUsuario(props.item)" icon>
             <v-icon color="blue">edit</v-icon>
           </v-btn>
           <v-btn icon>
@@ -32,12 +32,26 @@ export default {
         { text: 'Correo',  align: 'left', value: 'correo' },
         { text: '',  align: 'left' }
       ],
-      clientes: []
+      usuarios: [],
+      usuarioEdit: {}
+    }
+  },
+  methods: {
+    editarUsuario (usuario) {
+      this.$emit('editarUsuario',JSON.parse(JSON.stringify(usuario)))
+      this.usuarioEdit = usuario
+    },
+    actualizarUsuario (usuario) {
+      this.usuarioEdit.nombre = usuario.nombre
+      this.usuarioEdit.apellidos = usuario.apellidos
+      this.usuarioEdit.correo = usuario.correo
     }
   },
   created () {
+    this.$parent.$on('actualizarUsuario', this.actualizarUsuario)
+
     axios.get('/api/usuarios').then(response => {
-      this.clientes = response.data
+      this.usuarios = response.data
     })
   }
 }
