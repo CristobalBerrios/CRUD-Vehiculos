@@ -10,5 +10,6 @@ class Usuario extends Model
   use SoftDeletes;
 
   protected $table = 'usuarios';
+  protected $fillable = ['nombre', 'apellidos', 'correo'];
   protected $dates = ['deleted_at'];
 }
