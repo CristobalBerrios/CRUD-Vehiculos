@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500px">
     <v-card>
-      <v-toolbar flat color="blue" dark>
+      <v-toolbar color="blue darken-4" flat dark>
         <v-toolbar-title v-if="vehiculo.id">Editar Vehiculo</v-toolbar-title>
         <v-toolbar-title v-else>Agregar Vehiculo</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -40,15 +40,16 @@
           <v-select
             label="Dueño"
             :items="usuarios"
-            item-text="nombre"
+            item-text="nombre_completo"
             item-value="id"
-            v-model="vehiculo.usuario_id"
+            v-model="vehiculo.usuario"
             :rules="formRules"
+            return-object
             required>
           </v-select>
 
-          <v-btn block @click="editarVehiculo(vehiculo)" v-if="vehiculo.id">Guardar</v-btn>
-          <v-btn block @click="agregarUsuario(vehiculo)" v-else>Agregar</v-btn>
+          <v-btn color="blue darken-4" dark block @click="editarVehiculo(vehiculo)" v-if="vehiculo.id">Guardar</v-btn>
+          <v-btn color="blue darken-4" dark block @click="agregarVehiculo(vehiculo)" v-else>Agregar</v-btn>
       </v-form>
       </v-card-text>
     </v-card>
@@ -74,7 +75,8 @@ export default {
     },
     editarVehiculo (vehiculo) {
       if (this.$refs.form.validate()) {
-        axios.put(`/api/vehiculos/${vehiculo.id}`, vehiculo).then(() => {
+        vehiculo.usuario_id = vehiculo.usuario.id
+        axios.put(`/api/vehiculos/${vehiculo.id}`, vehiculo).then(response => {
           this.$emit('actualizarVehiculo', vehiculo)
           this.closeDialog()
         })
@@ -82,8 +84,11 @@ export default {
     },
     agregarVehiculo (vehiculo) {
       if (this.$refs.form.validate()) {
+        vehiculo.usuario_id = vehiculo.usuario.id
         axios.post('/api/vehiculos', vehiculo).then(response => {
-          this.$emit('nuevoVehiculo', response.data)
+          let newVehiculo = response.data
+          newVehiculo.usuario = vehiculo.usuario
+          this.$emit('nuevoVehiculo', newVehiculo)
           this.closeDialog()
         })
       }
