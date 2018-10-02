@@ -14,10 +14,12 @@
 
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <style>
+    </style>
 
   </head>
   <body>
-    <div id="app">
+    <div id="app" style="visibility: hidden;">
       <v-app>
         <v-navigation-drawer
           v-model="drawer"
@@ -25,7 +27,7 @@
           fixed
           app>
           <v-list dense>
-            <v-list-tile @click="">
+            <v-list-tile @click="go('/')">
               <v-list-tile-action>
                 <v-icon>people</v-icon>
               </v-list-tile-action>
@@ -33,7 +35,7 @@
                 <v-list-tile-title>Usuarios</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile @click="">
+            <v-list-tile @click="go('/vehiculos')">
               <v-list-tile-action>
                 <v-icon>directions_car</v-icon>
               </v-list-tile-action>
@@ -43,12 +45,12 @@
             </v-list-tile>
           </v-list>
         </v-navigation-drawer>
-        <v-toolbar app fixed clipped-left>
+        <v-toolbar color="blue darken-4" dark app fixed clipped-left>
           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
           <v-toolbar-title>Vehiculos CRUD</v-toolbar-title>
         </v-toolbar>
         <v-content>
-          <v-container grid-list-md fluid>
+          <v-container grid-list-md>
             @yield('content')
           </v-container>
         </v-content>
