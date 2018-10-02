@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500px">
     <v-card>
-      <v-toolbar flat color="blue" dark>
+      <v-toolbar color="blue darken-4" flat dark>
         <v-toolbar-title v-if="usuario.id">Editar Usuario</v-toolbar-title>
         <v-toolbar-title v-else>Agregar Usuario</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -30,8 +30,8 @@
             required>
           </v-text-field>
 
-          <v-btn block @click="editarUsuario(usuario)" v-if="usuario.id">Guardar</v-btn>
-          <v-btn block @click="agregarUsuario(usuario)" v-else>Agregar</v-btn>
+          <v-btn color="blue darken-4" dark block @click="editarUsuario(usuario)" v-if="usuario.id">Guardar</v-btn>
+          <v-btn color="blue darken-4" dark block @click="agregarUsuario(usuario)" v-else>Agregar</v-btn>
       </v-form>
       </v-card-text>
     </v-card>
@@ -69,7 +69,9 @@ export default {
     agregarUsuario (usuario) {
       if (this.$refs.form.validate()) {
         axios.post('/api/usuarios', usuario).then(response => {
-          this.$emit('nuevoUsuario', response.data)
+          let newUsuario = response.data
+          newUsuario.vehiculos = usuario.vehiculos
+          this.$emit('nuevoUsuario', newUsuario)
           this.closeDialog()
         })
       }
