@@ -1,8 +1,8 @@
 <template>
 <section>
-  <v-flex xs12 md8 lg8>
+  <v-flex xs12 md10 lg10>
     <v-flex offset-md8 offset-lg8 xs12>
-      <v-btn block dark @click="showForm">Agregar Usuario</v-btn>
+      <v-btn color="blue darken-4" block dark @click="showForm">Agregar Usuario</v-btn>
     </v-flex>
     <tabla-usuarios @editarUsuario="showForm"></tabla-usuarios>
   </v-flex>
