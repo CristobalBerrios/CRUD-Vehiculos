@@ -3,15 +3,18 @@
     <v-data-table
       :headers="headers"
       :items="vehiculos"
+      no-data-text=""
       hide-actions
       class="elevation-1">
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.nombre }}</td>
-        <td class="text-xs-left">{{ props.item.apellidos }}</td>
-        <td class="text-xs-left">{{ props.item.correo }}</td>
+        <td class="text-xs-left">{{ props.item.marca }}</td>
+        <td class="text-xs-left">{{ props.item.modelo }}</td>
+        <td class="text-xs-left">{{ props.item.year }}</td>
+        <td class="text-xs-left">{{ props.item.precio }}</td>
+        <td class="text-xs-left">{{ props.item.usuario.nombre_completo }}</td>
         <td class="text-xs-left"> 
           <v-btn @click="editarVehiculo(props.item)" icon>
-            <v-icon color="blue">edit</v-icon>
+            <v-icon color="blue darken-4">edit</v-icon>
           </v-btn>
           <v-btn @click="index = props.index, dialog = true" icon>
             <v-icon color="red">delete</v-icon>
@@ -25,8 +28,8 @@
         <v-card-text>¿Esta seguro de eliminar el vehiculo ?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat @click.native="eliminarVehiculo()">Confirmar</v-btn>
-          <v-btn color="green darken-1" flat @click.native="dialog = false">Cancelar</v-btn>
+          <v-btn flat @click.native="eliminarVehiculo()">Confirmar</v-btn>
+          <v-btn flat @click.native="dialog = false">Cancelar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -38,11 +41,12 @@ export default {
   data () {
     return {
       headers: [
-        { text: 'Marca', align: 'left', value: 'marca' },
-        { text: 'Modelo',  align: 'left', value: 'modelo' },
-        { text: 'Año',  align: 'left', value: 'year' },
-        { text: 'Precio',  align: 'left', value: 'precio' },
-        { text: 'Dueño',  align: 'left' }
+        { text: 'Marca', align: 'left', sortable: false, value: 'marca' },
+        { text: 'Modelo',  align: 'left', sortable: false, value: 'modelo' },
+        { text: 'Año',  align: 'left', sortable: false, value: 'year' },
+        { text: 'Precio',  align: 'left', sortable: false, value: 'precio' },
+        { text: 'Dueño',  align: 'left', sortable: false, value: 'usuario.nombre' },
+        { text: '',  align: 'left', sortable: false }
       ],
       vehiculos: [],
       vehiculoEdit: {},
@@ -63,6 +67,8 @@ export default {
       this.vehiculoEdit.modelo = vehiculo.modelo
       this.vehiculoEdit.year = vehiculo.year
       this.vehiculoEdit.precio = vehiculo.precio
+      this.vehiculoEdit.usuario_id = vehiculo.usuario_id
+      this.vehiculoEdit.usuario = vehiculo.usuario
     },
     eliminarVehiculo () {
       let id = this.vehiculos[this.index].id
