@@ -76,9 +76,12 @@ class VehiculoController extends Controller
      * @param  \App\Vehiculo  $vehiculo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vehiculo $vehiculo)
+    public function update(Request $request, $id)
     {
-        //
+        $vehiculo = Vehiculo::findOrFail($id);
+        $vehiculo->update($request->all());
+
+        return response()->json(['update' => true, 'vehiculo' => $vehiculo]);
     }
 
     /**
@@ -87,8 +90,9 @@ class VehiculoController extends Controller
      * @param  \App\Vehiculo  $vehiculo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Vehiculo $vehiculo)
+    public function destroy($id)
     {
-        //
+        Vehiculo::destroy($id);
+        return response()->json(['destroy' => true, 'id' => $id]);
     }
 }
