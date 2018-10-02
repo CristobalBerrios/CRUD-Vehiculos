@@ -12,4 +12,8 @@ class Usuario extends Model
   protected $table = 'usuarios';
   protected $fillable = ['nombre', 'apellidos', 'correo'];
   protected $dates = ['deleted_at'];
+
+  public function vehiculos() {
+    return $this->hasMany('App\Models\Vehiculo');
+  }
 }
