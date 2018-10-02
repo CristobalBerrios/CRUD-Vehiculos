@@ -19,8 +19,8 @@ class CreateVehiculosTable extends Migration
             $table->string('modelo');
             $table->integer('year');
             $table->integer('precio');
-            $table->integer('id_usuario')->unsigned();
-			$table->foreign('id_usuario')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->integer('usuario_id')->unsigned();
+			$table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
