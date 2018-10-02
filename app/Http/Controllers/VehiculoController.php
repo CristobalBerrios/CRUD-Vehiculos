@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Vehiculo;
 use Illuminate\Http\Request;
+use App\Models\Vehiculo;
 
 class VehiculoController extends Controller
 {
@@ -14,7 +14,8 @@ class VehiculoController extends Controller
      */
     public function index()
     {
-        //
+      $vehiculos = Vehiculo::with('usuario')->get();
+      return response()->json($vehiculos);
     }
 
     /**
@@ -35,7 +36,15 @@ class VehiculoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $vehiculo = new Vehiculo;
+      $vehiculo->marca = $request->marca;
+      $vehiculo->modelo = $request->modelo;
+      $vehiculo->year = $request->year;
+      $vehiculo->precio = $request->precio;
+      $vehiculo->usuario_id = $request->usuario_id;
+      $vehiculo->save();
+      
+      return response()->json($vehiculo);
     }
 
     /**
