@@ -3,6 +3,7 @@
     <v-data-table
       :headers="headers"
       :items="usuarios"
+      no-data-text=""
       hide-actions
       class="elevation-1">
       <template slot="items" slot-scope="props">
@@ -10,8 +11,13 @@
         <td class="text-xs-left">{{ props.item.apellidos }}</td>
         <td class="text-xs-left">{{ props.item.correo }}</td>
         <td class="text-xs-left"> 
+          <v-btn color="blue darken-4" dark small @click="showVehiculos(props.item)">
+            Ver Vehiculos
+          </v-btn>
+        </td>
+        <td class="text-xs-left"> 
           <v-btn @click="editarUsuario(props.item)" icon>
-            <v-icon color="blue">edit</v-icon>
+            <v-icon color="blue darken-4">edit</v-icon>
           </v-btn>
           <v-btn @click="index = props.index, dialog = true" icon>
             <v-icon color="red">delete</v-icon>
@@ -22,31 +28,39 @@
     <v-dialog v-model="dialog" persistent max-width="290">
       <v-card>
         <v-card-title class="headline">Eliminar Usuario</v-card-title>
-        <v-card-text>¿Esta seguro de eliminar el usuario ?</v-card-text>
+        <v-card-text>Si elimina el usuario tambien se eliminaran sus vehiculos, ¿esta seguro ?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat @click.native="eliminarUsuario()">Confirmar</v-btn>
-          <v-btn color="green darken-1" flat @click.native="dialog = false">Cancelar</v-btn>
+          <v-btn flat @click.native="eliminarUsuario()">Confirmar</v-btn>
+          <v-btn flat @click.native="dialog = false">Cancelar</v-btn>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogVehiculos" max-width="500">
+      <v-card>
+        <vehiculos-usuario :vehiculos="usuarioEdit.vehiculos"></vehiculos-usuario>
       </v-card>
     </v-dialog>
   </section>
 </template>
 
 <script>
+import VehiculosUsuario from '../vehiculos/VehiculosUsuario'
 export default {
   data () {
     return {
       headers: [
-        { text: 'Nombre', align: 'left', value: 'nombre' },
-        { text: 'Apellidos',  align: 'left', value: 'apellidos' },
-        { text: 'Correo',  align: 'left', value: 'correo' },
-        { text: '',  align: 'left' }
+        { text: 'Nombre', align: 'left', sortable: false, value: 'nombre' },
+        { text: 'Apellidos',  align: 'left', sortable: false, value: 'apellidos' },
+        { text: 'Correo',  align: 'left', sortable: false, value: 'correo' },
+        { text: '',  align: 'left', sortable: false },
+        { text: '',  align: 'left', sortable: false }
       ],
       usuarios: [],
       usuarioEdit: {},
       index: 0,
-      dialog: false
+      dialog: false,
+      dialogVehiculos: false
     }
   },
   methods: {
@@ -68,6 +82,10 @@ export default {
         this.dialog = false
         this.usuarios.splice(this.index, 1)
       })
+    },
+    showVehiculos (usuario) {
+      this.usuarioEdit = usuario
+      this.dialogVehiculos = true
     }
   },
   created () {
@@ -77,7 +95,8 @@ export default {
     axios.get('/api/usuarios').then(response => {
       this.usuarios = response.data
     })
-  }
+  },
+  components: {VehiculosUsuario}
 }
 </script>
 
