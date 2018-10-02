@@ -1,8 +1,8 @@
 <template>
 <section>
-  <v-flex xs12 md8 lg8>
-    <v-flex offset-md8 offset-lg8 xs12>
-      <v-btn block dark @click="showForm">Agregar Vehiculo</v-btn>
+  <v-flex xs12 md10 lg10>
+    <v-flex offset-md8 offset-lg8  xs12>
+      <v-btn color="blue darken-4" block dark @click="showForm">Agregar Vehiculo</v-btn>
     </v-flex>
     <tabla-vehiculos @editarVehiculo="showForm"></tabla-vehiculos>
   </v-flex>
